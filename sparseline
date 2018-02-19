@@ -6,6 +6,7 @@ XXX=$PS1
 function gitty()
 {
     declare status
+    declare star
 
     # two layers deep -- Ben Carson
     for path in {'.','..','../..'}/.git/HEAD
@@ -14,11 +15,16 @@ function gitty()
         then
             branch=$(<"${path}")
             branch="${branch//*\//}"
-            status+="« ${branch} »"
 
-            dirbase=$(dirname "${path}")
+            # if ! git diff --quiet
+            # then
+            #     star=$'*'
+            # fi
+            status+="« ${star}${branch} »"
 
-            hash=$(<"${dirbase}/refs/heads/${branch}")
+            # dirbase=$(dirname "${path}")
+
+            # hash=$(<"${dirbase}/refs/heads/${branch}")
 
             break
         fi

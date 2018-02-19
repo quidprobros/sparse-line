@@ -6,4 +6,4 @@ What is?
 `sparseline` is written with `bash` in mind.
 
 
-As of this commit, `sparseline` only prefixes your prompt with the status of the repo in the current directory (only aware of root currently).
+As of this commit, `sparseline` only prefixes your prompt with the status of the repo in the current directory (three layers deep).

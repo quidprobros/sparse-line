@@ -13,8 +13,8 @@ function gitty()
     do
         if [[ -r $path ]]
         then
-            branch=$(<"${path}")
-            branch="${branch//*\//}"
+            B=$(<"${path}")
+            B="${B//*\//}"
 
             # if ! git diff --quiet
             # then
@@ -23,10 +23,10 @@ function gitty()
 
             dirbase=$(dirname "${path}")
 
-            hash=$(<"${dirbase}/refs/heads/${branch}")
-            short_hash="${hash:0:7}"
+            hash=$(<"${dirbase}/refs/heads/${B}")
+            H="${hash:0:7}"
 
-            status+="« ${star}${branch} »"
+            status+="« ${star}${B}#${H} »"
 
 
             break

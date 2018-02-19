@@ -1,20 +1,19 @@
 #!/bin/env bash
 
+XXX=$PS1
 
 # get branch
 function gitty()
 {
-    local status
+    declare status
 
     if [[ -r .git/HEAD ]]
     then
         branch=$(<.git/HEAD)
         branch="${branch//*\//}"
-        status+="${branch}"
+        status+="« ${branch} »"
     fi
 
-   # export PS1
-   # PS1="${out}"
-    printf '%s\n' "${status}"
+    export PS1="${status}${XXX}"
 }
 export PROMPT_COMMAND=gitty

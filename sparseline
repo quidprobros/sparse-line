@@ -7,12 +7,17 @@ function gitty()
 {
     declare status
 
-    if [[ -r .git/HEAD ]]
-    then
-        branch=$(<.git/HEAD)
-        branch="${branch//*\//}"
-        status+="« ${branch} »"
-    fi
+    # two layers deep -- Ben Carson
+    for dir in {'.','..','../..'}/.git/HEAD
+    do
+        if [[ -r $dir ]]
+        then
+            branch=$(<"${dir}")
+            branch="${branch//*\//}"
+            status+="« ${branch} »"
+        fi
+
+    done
 
     export PS1="${status}${XXX}"
 }

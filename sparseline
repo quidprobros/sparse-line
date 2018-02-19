@@ -8,15 +8,20 @@ function gitty()
     declare status
 
     # two layers deep -- Ben Carson
-    for dir in {'.','..','../..'}/.git/HEAD
+    for path in {'.','..','../..'}/.git/HEAD
     do
-        if [[ -r $dir ]]
+        if [[ -r $path ]]
         then
-            branch=$(<"${dir}")
+            branch=$(<"${path}")
             branch="${branch//*\//}"
             status+="« ${branch} »"
-        fi
 
+            dirbase=$(dirname "${path}")
+
+            hash=$(<"${dirbase}/refs/heads/${branch}")
+
+            break
+        fi
     done
 
     export PS1="${status}${XXX}"

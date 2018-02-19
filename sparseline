@@ -20,11 +20,14 @@ function gitty()
             # then
             #     star=$'*'
             # fi
+
+            dirbase=$(dirname "${path}")
+
+            hash=$(<"${dirbase}/refs/heads/${branch}")
+            short_hash="${hash:0:7}"
+
             status+="« ${star}${branch} »"
 
-            # dirbase=$(dirname "${path}")
-
-            # hash=$(<"${dirbase}/refs/heads/${branch}")
 
             break
         fi

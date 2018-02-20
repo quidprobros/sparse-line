@@ -8,7 +8,6 @@ function gitty()
     declare status
     declare star
 
-    # two layers deep -- Ben Carson
     for path in {'.','..','../..'}/.git/HEAD
     do
         if [[ -r $path ]]

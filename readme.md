@@ -6,4 +6,8 @@ What is?
 `sparseline` is written with `bash` in mind.
 
 
-As of this commit, `sparseline` only prefixes your prompt with the status of the repo in the current directory (three layers deep).
+features
+===
+* this is prefixed to PS1: `« branch#short_hash »`
+
+Example: `« master#77f6ff4 » • 19:02:57|ramos@Prometheus:[sparse-line]>`

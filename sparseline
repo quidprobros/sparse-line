@@ -1,11 +1,19 @@
 #!/bin/env bash
 
+
+
 declare _PS1
 _PS1=$PS1
+
+
+
 
 # get branch
 function gitty()
 {
+    shopt -s extglob;
+    shopt -s nullglob;
+    :
     local dirbase
     local status
     local S
@@ -38,13 +46,15 @@ function gitty()
             _H=$(<"${dirbase}/refs/heads/${B}")
             H="${_H:0:7}"
 
+            unset -v path
 
-            if read -r T < <(grep "${H}" "${dirbase}/refs/tags/"*) >/dev/null 2>&1
-            then
-                T="${T/*\//}"
-                T="${T/\:*/}"
-                H="${T}"
-            fi
+            for path in .git/refs/tags/*
+            do
+                X=$(<$path)
+                [[ $H == "${X:0:7}" ]] && H="${path}"
+            done
+
+
             status="« ${S} ${R}/${B}#${H} »"
 
             break

@@ -21,3 +21,10 @@ Simple source the file from the appropriate bash config file:
 ```bash
 source /path/to/sparseline
 ```
+
+
+critique
+===
+* osse@freenode#git: I think it might be a bit naïve. For example the file refs/heads/somebranch doesn't necessarily exist even when the branch does
+* lupine@freenode#git: some refs are stored in `.git/packed-refs` and so grepping `refs/*` is not enough; Not sure actually, it makes sense that local branches aren't packed that way
+* _ikke_ git gc will pack local branches

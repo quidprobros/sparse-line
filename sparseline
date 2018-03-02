@@ -28,8 +28,6 @@ function gitty()
 
             dirbase=$(dirname "${path}")
 
-
-
             while read -r words
             do
                 str="${pre}${words}"

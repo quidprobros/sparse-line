@@ -44,7 +44,9 @@ function gitty()
             for tag_path in ${dirbase}/refs/tags/*
             do
                 X=$(<"${tag_path}")
-                [[ $H == "${X:0:7}" ]] && H=$(basename "${tag_path}")
+                [[ $H == "${X:0:7}" ]] && \
+                    T=$(basename "${tag_path}") && \
+                    H="${T}"
             done
 
             status="« ${S} ${R}/${B}#${H} »"

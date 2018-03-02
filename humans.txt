@@ -1,0 +1,4 @@
+/* Thanks */
+- osse@freenode#git
+- lupine@freenode#git
+- _ikke_@freenode#git

@@ -1,12 +1,7 @@
 #!/bin/env bash
 
-
-
 declare _PS1
 _PS1=$PS1
-
-
-
 
 # get branch
 function gitty()
@@ -41,19 +36,16 @@ function gitty()
                 str="${pre}${words}"
                 pre="${words}"
                 [[ $str =~ \"${B}\"\]remote\ =\ (.*) ]] && R="${BASH_REMATCH[1]}" && break
-            done < "${dirbase}/config"
+            done < "${dirbase:?}/config"
 
             _H=$(<"${dirbase}/refs/heads/${B}")
             H="${_H:0:7}"
 
-            unset -v path
-
-            for path in .git/refs/tags/*
+            for tag_path in ${dirbase}/refs/tags/*
             do
-                X=$(<$path)
-                [[ $H == "${X:0:7}" ]] && H="${path}"
+                X=$(<"${tag_path}")
+                [[ $H == "${X:0:7}" ]] && H=$(basename "${tag_path}")
             done
-
 
             status="« ${S} ${R}/${B}#${H} »"
 

@@ -1,12 +1,14 @@
 #!/bin/env bash
 
-XXX=$PS1
+declare _PS1
+_PS1=$PS1
 
 # get branch
 function gitty()
 {
-    declare status
-    declare star
+    local status
+    local star
+
 
     for path in {'.','..','../..'}/.git/HEAD
     do
@@ -15,23 +17,25 @@ function gitty()
             B=$(<"${path}")
             B="${B//*\//}"
 
-            # if ! git diff --quiet
-            # then
-            #     star=$'*'
-            # fi
-
             dirbase=$(dirname "${path}")
 
-            hash=$(<"${dirbase}/refs/heads/${B}")
-            H="${hash:0:7}"
+            while read -r words
+            do
+                str="${pre}${words}"
+                pre="${words}"
+                [[ $str =~ \"$B\"\]remote\ =\ (.*) ]] && R="${BASH_REMATCH[1]}" && break
+            done < "${dirbase}/config"
 
-            status+="« ${star}${B}#${H} »"
 
+            _H=$(<"${dirbase}/refs/heads/${B}")
+            H="${_H:0:7}"
+
+            status="« ${star}${R}/${B}#${H} »"
 
             break
         fi
     done
 
-    export PS1="${status}${XXX}"
+    export PS1="${status}${_PS1}"
 }
 export PROMPT_COMMAND=gitty

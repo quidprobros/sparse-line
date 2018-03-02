@@ -6,36 +6,54 @@ _PS1=$PS1
 # get branch
 function gitty()
 {
+    local dirbase
     local status
-    local star
+    local S
+    local R
+    local B
+    local H
+    local T
 
 
     for path in {'.','..','../..'}/.git/HEAD
     do
+
         if [[ -r $path ]]
         then
+            S=$'○'; _SF=$'×';
+            [[ $1 -ne 0 ]] && S="${_SF}"
+
             B=$(<"${path}")
             B="${B//*\//}"
 
             dirbase=$(dirname "${path}")
 
+
+
             while read -r words
             do
                 str="${pre}${words}"
                 pre="${words}"
-                [[ $str =~ \"$B\"\]remote\ =\ (.*) ]] && R="${BASH_REMATCH[1]}" && break
+                [[ $str =~ \"${B}\"\]remote\ =\ (.*) ]] && R="${BASH_REMATCH[1]}" && break
             done < "${dirbase}/config"
-
 
             _H=$(<"${dirbase}/refs/heads/${B}")
             H="${_H:0:7}"
 
-            status="« ${star}${R}/${B}#${H} »"
+
+            if read -r T < <(grep "${H}" "${dirbase}/refs/tags/"*) >/dev/null 2>&1
+            then
+                T="${T/*\//}"
+                T="${T/\:*/}"
+                H="${T}"
+            fi
+            status="« ${S} ${R}/${B}#${H} »"
 
             break
         fi
     done
 
     export PS1="${status}${_PS1}"
+    return 0
 }
-export PROMPT_COMMAND=gitty
+export PROMPT_COMMAND='gitty $?'

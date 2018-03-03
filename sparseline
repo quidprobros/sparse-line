@@ -12,6 +12,9 @@ function gitty()
     local path
     local dirbase
     local status
+    local str
+    local pre
+    local re
     local S
     local R
     local B
@@ -20,11 +23,6 @@ function gitty()
     local T
     local X
     local C; # commit difference
-
-    #local
-    #wc -l < logs/refs/heads/master
-    #remote
-    #wc -l < logs/refs/remotes/origin/master
 
     for path in {'.','..','../..'}/.git/HEAD
     do
@@ -40,22 +38,21 @@ function gitty()
 
             while read -r words
             do
-                str="${pre}${words}"
-                pre="${words}"
-                [[ $str =~ \"${B}\"\]remote\ =\ (.*) ]] && R="${BASH_REMATCH[1]}" && break
+                re=$"\\[remote \"(.*)\"\\]"
+                [[ "${words}" =~ ${re} ]] && R="${BASH_REMATCH[1]}" && break
             done < "${dirbase:?}/config"
 
             if [[ -r "${dirbase}/refs/heads/${B}" ]]; then
                 _H=$(<"${dirbase}/refs/heads/${B}")
                 H="${_H:0:7}"
-                C=$(( $( wc -l < "${dirbase}/logs/refs/heads/${B}" ) - $( wc -l < "${dirbase}/logs/refs/remotes/${R}/${B}" ) ))
-                if [[ $C -lt 0 ]]; then
-                    C=$"↓${C}"
-                elif [[ $C -gt 0 ]]; then
-                    C=$"↑${C}"
-                elif [[ $C -eq 0 ]]; then
-                    C=$'*'
-                fi
+                # C=$(( $( wc -l < "${dirbase}/logs/refs/heads/${B}" ) - $( wc -l < "${dirbase}/logs/refs/remotes/${R}/${B}" ) ))
+                # if [[ $C -lt 0 ]]; then
+                #     C=$"↓${C}"
+                # elif [[ $C -gt 0 ]]; then
+                #     C=$"↑${C}"
+                # elif [[ $C -eq 0 ]]; then
+                #     C=$'*'
+                # fi
 
             else
                 H=$''
@@ -69,14 +66,13 @@ function gitty()
                     T=$(basename "${tag_path}") && \
                     H="${T}"
             done
-
             status="« ${S} ${R:+$R/}${B}${H:+#$H} ${C} »"
 
-            break
+            break 2
         fi
     done
 
     export PS1="${status}${_PS1}"
     return 0
 }
-export PROMPT_COMMAND='gitty $?'
+export PROMPT_COMMAND='gitty $?    '

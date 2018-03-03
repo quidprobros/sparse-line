@@ -9,11 +9,13 @@ function gitty()
     shopt -s extglob;
     shopt -s nullglob;
     :
+    local path
     local dirbase
     local status
     local S
     local R
     local B
+    local _H
     local H
     local T
     local X
@@ -23,15 +25,13 @@ function gitty()
     do
         if [[ -r $path ]]
         then
-            S=$'○'; _SF=$'×';
-            [[ $1 -ne 0 ]] && S="${_SF}"
-
+            S=$'○'
+            [[ $1 -ne 0 ]] && S=$'×';
 
             dirbase=$(dirname "${path}")
 
             B=$(<"${path}")
             B="${B//*\//}"
-
 
             while read -r words
             do

@@ -16,20 +16,22 @@ function gitty()
     local B
     local H
     local T
+    local X
 
 
     for path in {'.','..','../..'}/.git/HEAD
     do
-
         if [[ -r $path ]]
         then
             S=$'○'; _SF=$'×';
             [[ $1 -ne 0 ]] && S="${_SF}"
 
+
+            dirbase=$(dirname "${path}")
+
             B=$(<"${path}")
             B="${B//*\//}"
 
-            dirbase=$(dirname "${path}")
 
             while read -r words
             do
@@ -38,8 +40,13 @@ function gitty()
                 [[ $str =~ \"${B}\"\]remote\ =\ (.*) ]] && R="${BASH_REMATCH[1]}" && break
             done < "${dirbase:?}/config"
 
-            _H=$(<"${dirbase}/refs/heads/${B}")
-            H="${_H:0:7}"
+            if [[ -r "${dirbase}/refs/heads/${B}" ]]; then
+                _H=$(<"${dirbase}/refs/heads/${B}")
+                H="${_H:0:7}"
+            else
+                H=$''
+                B="^${B:0:7}"
+            fi
 
             for tag_path in ${dirbase}/refs/tags/*
             do
@@ -49,7 +56,7 @@ function gitty()
                     H="${T}"
             done
 
-            status="« ${S} ${R}/${B}#${H} »"
+            status="« ${S} ${R:+$R/}${B}${H:+#$H} »"
 
             break
         fi

@@ -12,8 +12,6 @@ function gitty()
     local path
     local dirbase
     local status
-    local str
-    local pre
     local re
     local S
     local R
@@ -23,13 +21,33 @@ function gitty()
     local T
     local X
     local C; # commit difference
+    :
+    local D=$'\uE0B0'
+    :
+    local _b_="\\033[48;5;"
+    local _f_="\\033[38;5;"
+    local __="\\[\\033[m"
+
+    local r_="${_f_}219m"
+    local _r="${_b_}219m"
+
+    local b_="${_f_}21m"
+    local _b="${_b_}21m"
+
+    local g_="${_f_}40m"
+    local _g="${_b_}40m"
+
+    local k_="${_f_}232m"
+    local _k="${_b_}232m"
+
+    local w_="${_f_}231m"
 
     for path in {'.','..','../..'}/.git/HEAD
     do
         if [[ -r $path ]]
         then
-            S=$'○'
-            [[ $1 -ne 0 ]] && S=$'×';
+            S="${g_}"$'\u25CF'
+            [[ $1 -ne 0 ]] && S="${r_}×";
 
             dirbase=$(dirname "${path}")
 
@@ -41,6 +59,7 @@ function gitty()
                 re=$"\\[remote \"(.*)\"\\]"
                 [[ "${words}" =~ ${re} ]] && R="${BASH_REMATCH[1]}" && break
             done < "${dirbase:?}/config"
+            R="${R:-remote?}" # give default value if otherwise undefined
 
             if [[ -r "${dirbase}/refs/heads/${B}" ]]; then
                 _H=$(<"${dirbase}/refs/heads/${B}")
@@ -53,7 +72,6 @@ function gitty()
                 # elif [[ $C -eq 0 ]]; then
                 #     C=$'*'
                 # fi
-
             else
                 H=$''
                 B="^${B:0:7}"
@@ -66,7 +84,7 @@ function gitty()
                     T=$(basename "${tag_path}") && \
                     H="${T}"
             done
-            status="« ${S} ${R:+$R/}${B}${H:+#$H} ${C} »"
+            status="$_k ${S} $__$_b$w_${R:+$R/}${B}${H:+#$H}${C}$__$b_${D}$__"
 
             break 2
         fi
@@ -75,4 +93,4 @@ function gitty()
     export PS1="${status}${_PS1}"
     return 0
 }
-export PROMPT_COMMAND='gitty $?    '
+export PROMPT_COMMAND='gitty $?'

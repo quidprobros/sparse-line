@@ -27,6 +27,11 @@ thoughts
 * What about defining vars?
 
 
+do
+===
+* switch for turning off color
+* switch for no-special symbols
+
 critique
 ===
 * osse@freenode#git: I think it might be a bit naïve. For example the file refs/heads/somebranch doesn't necessarily exist even when the branch does

@@ -22,6 +22,10 @@ Simple source the file from the appropriate bash config file:
 source /path/to/sparseline
 ```
 
+thoughts
+===
+* What about defining vars?
+
 
 critique
 ===

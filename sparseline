@@ -19,7 +19,12 @@ function gitty()
     local H
     local T
     local X
+    local C; # commit difference
 
+    #local
+    #wc -l < logs/refs/heads/master
+    #remote
+    #wc -l < logs/refs/remotes/origin/master
 
     for path in {'.','..','../..'}/.git/HEAD
     do
@@ -33,12 +38,19 @@ function gitty()
             B=$(<"${path}")
             B="${B//*\//}"
 
+
+
+
+
             while read -r words
             do
                 str="${pre}${words}"
                 pre="${words}"
                 [[ $str =~ \"${B}\"\]remote\ =\ (.*) ]] && R="${BASH_REMATCH[1]}" && break
             done < "${dirbase:?}/config"
+
+            C=$(( $( wc -l < "${dirbase}/logs/refs/heads/${B}" ) - $( wc -l < "${dirbase}/logs/refs/remotes/${R}/${B}" ) ))
+
 
             if [[ -r "${dirbase}/refs/heads/${B}" ]]; then
                 _H=$(<"${dirbase}/refs/heads/${B}")
@@ -56,7 +68,7 @@ function gitty()
                     H="${T}"
             done
 
-            status="« ${S} ${R:+$R/}${B}${H:+#$H} »"
+            status="« ${S} ${R:+$R/}${B}${H:+#$H} $C »"
 
             break
         fi

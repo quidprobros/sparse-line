@@ -50,7 +50,13 @@ function gitty()
             done < "${dirbase:?}/config"
 
             C=$(( $( wc -l < "${dirbase}/logs/refs/heads/${B}" ) - $( wc -l < "${dirbase}/logs/refs/remotes/${R}/${B}" ) ))
-
+            if [[ $C -lt 0 ]]; then
+                C=$"↓${C}"
+            elif [[ $C -gt 0 ]]; then
+                C=$"↑${C}"
+            elif [[ $C -eq 0 ]]; then
+                C=$'*'
+            fi
 
             if [[ -r "${dirbase}/refs/heads/${B}" ]]; then
                 _H=$(<"${dirbase}/refs/heads/${B}")
@@ -68,7 +74,7 @@ function gitty()
                     H="${T}"
             done
 
-            status="« ${S} ${R:+$R/}${B}${H:+#$H} $C »"
+            status="« ${S} ${R:+$R/}${B}${H:+#$H} ${C} »"
 
             break
         fi

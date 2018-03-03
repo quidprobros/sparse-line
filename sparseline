@@ -38,10 +38,6 @@ function gitty()
             B=$(<"${path}")
             B="${B//*\//}"
 
-
-
-
-
             while read -r words
             do
                 str="${pre}${words}"
@@ -49,18 +45,18 @@ function gitty()
                 [[ $str =~ \"${B}\"\]remote\ =\ (.*) ]] && R="${BASH_REMATCH[1]}" && break
             done < "${dirbase:?}/config"
 
-            C=$(( $( wc -l < "${dirbase}/logs/refs/heads/${B}" ) - $( wc -l < "${dirbase}/logs/refs/remotes/${R}/${B}" ) ))
-            if [[ $C -lt 0 ]]; then
-                C=$"↓${C}"
-            elif [[ $C -gt 0 ]]; then
-                C=$"↑${C}"
-            elif [[ $C -eq 0 ]]; then
-                C=$'*'
-            fi
-
             if [[ -r "${dirbase}/refs/heads/${B}" ]]; then
                 _H=$(<"${dirbase}/refs/heads/${B}")
                 H="${_H:0:7}"
+                C=$(( $( wc -l < "${dirbase}/logs/refs/heads/${B}" ) - $( wc -l < "${dirbase}/logs/refs/remotes/${R}/${B}" ) ))
+                if [[ $C -lt 0 ]]; then
+                    C=$"↓${C}"
+                elif [[ $C -gt 0 ]]; then
+                    C=$"↑${C}"
+                elif [[ $C -eq 0 ]]; then
+                    C=$'*'
+                fi
+
             else
                 H=$''
                 B="^${B:0:7}"

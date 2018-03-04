@@ -23,12 +23,12 @@ function gitty()
     local C; # commit difference
     :
     local D
-    if [[ $LANG == 'en_US.UTF-8' ]]; then
+    if [[ ${LC_ALL:-${LC_CTYPE:-$LANG}} == *UTF-8 ]]; then
         D=$'\uE0B0'
         S=$'\u25CF'
     else
         D='|'
-        D='x'
+        S='•'
     fi
     :
     local _b_="\\033[48;5;"
@@ -38,8 +38,8 @@ function gitty()
     local r_="${_f_}219m"
     local _r="${_b_}219m"
 
-    local b_="${_f_}21m"
-    local _b="${_b_}21m"
+    local b_="${_f_}33m"
+    local _b="${_b_}33m"
 
     local g_="${_f_}40m"
     local _g="${_b_}40m"

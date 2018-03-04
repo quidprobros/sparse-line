@@ -71,6 +71,8 @@ function gitty()
             if [[ -r "${dirbase}/refs/heads/${B}" ]]; then
                 _H=$(<"${dirbase}/refs/heads/${B}")
                 H="${_H:0:7}"
+
+                # NO EXTERNAL PROGRAMS!
                 # C=$(( $( wc -l < "${dirbase}/logs/refs/heads/${B}" ) - $( wc -l < "${dirbase}/logs/refs/remotes/${R}/${B}" ) ))
                 # if [[ $C -lt 0 ]]; then
                 #     C=$"↓${C}"

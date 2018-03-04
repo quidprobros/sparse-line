@@ -8,10 +8,13 @@ What is?
 features
 ===
 * this is prefixed to PS1: `« remote/branch#short_hash »`
+* The "short_hash" is replaced with local tag when applicable.
+* does not invoke, instead relying on bashisms
 
-The "short_hash" is replaced with local tag when applicable.
 
-Example: `« origin/master#77f6ff4 » • 19:02:57|ramos@Prometheus:[sparse-line]>`
+Example
+===
+`« origin/master#77f6ff4 » • 19:02:57|ramos@Prometheus:[sparse-line]>`
 
 
 usage

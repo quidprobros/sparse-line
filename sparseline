@@ -6,6 +6,8 @@ _PS1=$PS1
 # get branch
 function gitty()
 {
+    # preserve shopt settings
+    prvOpt=$(shopt -p extglob nullglob|sed ':a;N;$!ba;s/\n/;/g')
     shopt -s extglob;
     shopt -s nullglob;
     :
@@ -100,6 +102,9 @@ function gitty()
     done
 
     export PS1="${status}${_PS1}"
+
+    # restore shopt settings
+    eval "${prvOpt}"
     return 0
 }
 export PROMPT_COMMAND='gitty $?'

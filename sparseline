@@ -97,4 +97,4 @@ function gitty()
     eval "${prvOpt}"
     return 0
 }
-PROMPT_COMMAND='gitty $?'
+PROMPT_COMMAND='gitty $? $PROMPT_COMMAND'

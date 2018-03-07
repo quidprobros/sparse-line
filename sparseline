@@ -89,6 +89,7 @@ function sparseline_ps1()
                     H="${T}"
             done
             sparseline_status="$_k ${S} $__$_b$w_${R:+$R/}${B}${H:+#$H}${C}$__$b_${D}$__"
+            sparseline_status="${sparseline_status//$'\n'/}"
             break 2
         fi
     done

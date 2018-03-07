@@ -2,4 +2,7 @@
 - osse@freenode#git
 - lupine@freenode#git
 - _ikke_@freenode#git
+- geirha@freenode#bash
+
+
 - reddit.com/u/bofhdk

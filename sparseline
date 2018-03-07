@@ -31,23 +31,24 @@ function sparseline_ps1()
         D=$'\uE0B0'
         S=$'\u25CF'
         :
-        local _b_="\\033[48;5;"
-        local _f_="\\033[38;5;"
-        local __="\\[\\033[m"
+        local _b_="\\[\\033[48;5;"
+        local _f_="\\[\\033[38;5;"
+        local __="\\[\\033[m\\]"
 
-        local r_="${_f_}219m"
-        local _r="${_b_}219m"
 
-        local b_="${_f_}33m"
-        local _b="${_b_}33m"
+        local r_="${_f_}219m\\]"
+        local _r="${_b_}219m\\]"
 
-        local g_="${_f_}40m"
-        local _g="${_b_}40m"
+        local b_="${_f_}33m\\]"
+        local _b="${_b_}33m\\]"
 
-        local k_="${_f_}232m"
-        local _k="${_b_}232m"
+        local g_="${_f_}40m\\]"
+        local _g="${_b_}40m\\]"
 
-        local w_="${_f_}231m"
+        local k_="${_f_}232m\\]"
+        local _k="${_b_}232m\\]"
+
+        local w_="${_f_}231m\\]"
 
     else
         D='|'
@@ -89,11 +90,10 @@ function sparseline_ps1()
                 T=$(basename "${tag_path}") && \
                 H="${T}"
         done
-        sparseline_status="$_k ${S} $__$_b$w_${R:+$R/}${B}${H:+#$H}${C}$__$b_${D}$__"
-        sparseline_status="${sparseline_status//$'\n'/}"
+        sparseline_status="${_k} ${S} ${_b}${w_}${R:+$R/}${B}${H:+#$H}${C}${__}${b_}${D}${__}"
         :
     done
-    export PS1=$sparseline_status$_PS1
+    export PS1="${sparseline_status}${_PS1}"
     # restore shopt settings
     eval "${prvOpt}"
     return 0

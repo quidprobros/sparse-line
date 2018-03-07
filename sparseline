@@ -6,6 +6,7 @@ _PS1=$PS1
 function sparseline_ps1()
 {
 
+    local __return_code=$?
     # preserve shopt settings
     prvOpt=$(shopt -p extglob nullglob|sed ':a;N;$!ba;s/\n/;/g')
     shopt -s extglob;
@@ -55,47 +56,46 @@ function sparseline_ps1()
 
     for path in {'.','..','../..'}/.git/HEAD
     do
-        if [[ -r $path ]]
+        [[ ! -r $path ]] && break
+        S="${g_}${S}"
+        [[ $__return_code -ne 0 ]] && S="${r_}×";
+
+        dirbase=$(dirname "${path}")
+
+        B=$(<"${path}")
+        B="${B//*\//}"
+
+        while read -r words
+        do
+            re=$"\\[remote \"(.*)\"\\]"
+            [[ "${words}" =~ ${re} ]] && R="${BASH_REMATCH[1]}" && break
+        done < "${dirbase:?}/config"
+
+        R="${R:-remote?}" # give default value if otherwise undefined
+
+        if H=$(<"${dirbase}/refs/heads/${B}") >/dev/null 2>&1
         then
-            S="${g_}${S}"
-            [[ $1 -ne 0 ]] && S="${r_}×";
-
-            dirbase=$(dirname "${path}")
-
-            B=$(<"${path}")
-            B="${B//*\//}"
-
-            while read -r words
-            do
-                re=$"\\[remote \"(.*)\"\\]"
-                [[ "${words}" =~ ${re} ]] && R="${BASH_REMATCH[1]}" && break
-            done < "${dirbase:?}/config"
-
-            R="${R:-remote?}" # give default value if otherwise undefined
-
-            if H=$(<"${dirbase}/refs/heads/${B}") >/dev/null 2>&1
-            then
-                H="${_H:0:7}"
-            else
-                H=$''
-                B="^${B:0:7}"
-            fi
-
-            for tag_path in ${dirbase}/refs/tags/*
-            do
-                X=$(<"${tag_path}")
-                [[ $H == "${X:0:7}" ]] && \
-                    T=$(basename "${tag_path}") && \
-                    H="${T}"
-            done
-            sparseline_status="$_k ${S} $__$_b$w_${R:+$R/}${B}${H:+#$H}${C}$__$b_${D}$__"
-            sparseline_status="${sparseline_status//$'\n'/}"
-            break 2
+            H="${_H:0:7}"
+        else
+            H=$''
+            B="^${B:0:7}"
         fi
+
+        for tag_path in ${dirbase}/refs/tags/*
+        do
+            X=$(<"${tag_path}")
+            [[ $H == "${X:0:7}" ]] && \
+                T=$(basename "${tag_path}") && \
+                H="${T}"
+        done
+        sparseline_status="$_k ${S} $__$_b$w_${R:+$R/}${B}${H:+#$H}${C}$__$b_${D}$__"
+        sparseline_status="${sparseline_status//$'\n'/}"
+        break 2
+
     done
     export PS1=$sparseline_status$_PS1
     # restore shopt settings
     eval "${prvOpt}"
     return 0
 }
-PROMPT_COMMAND="sparseline_ps1 $? ; $PROMPT_COMMAND"
+PROMPT_COMMAND="sparseline_ps1; $PROMPT_COMMAND"

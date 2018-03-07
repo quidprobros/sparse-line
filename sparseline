@@ -3,7 +3,7 @@
 unset _PS1
 _PS1=$PS1
 
-function gitty()
+function sparseline_ps1()
 {
 
     # preserve shopt settings
@@ -97,4 +97,4 @@ function gitty()
     eval "${prvOpt}"
     return 0
 }
-PROMPT_COMMAND='gitty $? $PROMPT_COMMAND'
+PROMPT_COMMAND="sparseline_ps1 $? ; $PROMPT_COMMAND"

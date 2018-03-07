@@ -1,5 +1,6 @@
 #!/bin/env bash
 
+[[ $PROMPT_COMMAND = "sparseline_ps1" ]] && return
 unset _PS1
 _PS1=$PS1
 
@@ -56,7 +57,8 @@ function sparseline_ps1()
 
     for path in {'.','..','../..'}/.git/HEAD
     do
-        [[ ! -r $path ]] && continue
+        [[ ! -r "${path}" ]] && continue
+
         S="${g_}${S}"
         [[ $__return_code -ne 0 ]] && S="${r_}×";
 
@@ -91,11 +93,12 @@ function sparseline_ps1()
         done
         sparseline_status="$_k ${S} $__$_b$w_${R:+$R/}${B}${H:+#$H}${C}$__$b_${D}$__"
         sparseline_status="${sparseline_status//$'\n'/}"
-        break
+        :
+#        break 2
     done
     export PS1=$sparseline_status$_PS1
     # restore shopt settings
     eval "${prvOpt}"
     return 0
 }
-PROMPT_COMMAND="sparseline_ps1; $PROMPT_COMMAND"
+PROMPT_COMMAND="sparseline_ps1"

@@ -73,8 +73,9 @@ function sparseline_ps1()
 
         R="${R:-remote?}" # give default value if otherwise undefined
 
-        if H=$(<"${dirbase}/refs/heads/${B}") >/dev/null 2>&1
+        if [[ -r "${dirbase}/refs/heads/${B}" ]]
         then
+            H=$(<"${dirbase}/refs/heads/${B}")
             H="${_H:0:7}"
         else
             H=$''

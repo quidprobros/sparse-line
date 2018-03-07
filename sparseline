@@ -1,24 +1,24 @@
 #!/bin/env bash
 
-declare _PS1
+unset _PS1
 _PS1=$PS1
 
-# get branch
 function gitty()
 {
+
     # preserve shopt settings
     prvOpt=$(shopt -p extglob nullglob|sed ':a;N;$!ba;s/\n/;/g')
     shopt -s extglob;
     shopt -s nullglob;
     :
+    local sparseline_status
+    :
     local path
     local dirbase
-    local status
     local re
     local S
     local R
     local B
-    local _H
     local H
     local T
     local X
@@ -28,28 +28,30 @@ function gitty()
     if [[ ${LC_ALL:-${LC_CTYPE:-$LANG}} == *UTF-8 ]]; then
         D=$'\uE0B0'
         S=$'\u25CF'
+        :
+        local _b_="\\033[48;5;"
+        local _f_="\\033[38;5;"
+        local __="\\[\\033[m"
+
+        local r_="${_f_}219m"
+        local _r="${_b_}219m"
+
+        local b_="${_f_}33m"
+        local _b="${_b_}33m"
+
+        local g_="${_f_}40m"
+        local _g="${_b_}40m"
+
+        local k_="${_f_}232m"
+        local _k="${_b_}232m"
+
+        local w_="${_f_}231m"
+
     else
         D='|'
         S='•'
     fi
     :
-    local _b_="\\033[48;5;"
-    local _f_="\\033[38;5;"
-    local __="\\[\\033[m"
-
-    local r_="${_f_}219m"
-    local _r="${_b_}219m"
-
-    local b_="${_f_}33m"
-    local _b="${_b_}33m"
-
-    local g_="${_f_}40m"
-    local _g="${_b_}40m"
-
-    local k_="${_f_}232m"
-    local _k="${_b_}232m"
-
-    local w_="${_f_}231m"
 
     for path in {'.','..','../..'}/.git/HEAD
     do
@@ -68,10 +70,11 @@ function gitty()
                 re=$"\\[remote \"(.*)\"\\]"
                 [[ "${words}" =~ ${re} ]] && R="${BASH_REMATCH[1]}" && break
             done < "${dirbase:?}/config"
+
             R="${R:-remote?}" # give default value if otherwise undefined
 
-            if [[ -r "${dirbase}/refs/heads/${B}" ]]; then
-                _H=$(<"${dirbase}/refs/heads/${B}")
+            if H=$(<"${dirbase}/refs/heads/${B}") >/dev/null 2>&1
+            then
                 H="${_H:0:7}"
             else
                 H=$''
@@ -85,16 +88,13 @@ function gitty()
                     T=$(basename "${tag_path}") && \
                     H="${T}"
             done
-            status="$_k ${S} $__$_b$w_${R:+$R/}${B}${H:+#$H}${C}$__$b_${D}$__"
-
+            sparseline_status="$_k ${S} $__$_b$w_${R:+$R/}${B}${H:+#$H}${C}$__$b_${D}$__"
             break 2
         fi
     done
-
-    export PS1="${status}${_PS1}"
-
+    export PS1=$sparseline_status$_PS1
     # restore shopt settings
     eval "${prvOpt}"
     return 0
 }
-export PROMPT_COMMAND='gitty $?'
+PROMPT_COMMAND='gitty $?'

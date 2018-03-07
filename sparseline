@@ -56,7 +56,7 @@ function sparseline_ps1()
 
     for path in {'.','..','../..'}/.git/HEAD
     do
-        [[ ! -r $path ]] && break
+        [[ ! -r $path ]] && continue
         S="${g_}${S}"
         [[ $__return_code -ne 0 ]] && S="${r_}×";
 
@@ -91,8 +91,7 @@ function sparseline_ps1()
         done
         sparseline_status="$_k ${S} $__$_b$w_${R:+$R/}${B}${H:+#$H}${C}$__$b_${D}$__"
         sparseline_status="${sparseline_status//$'\n'/}"
-        break 2
-
+        break
     done
     export PS1=$sparseline_status$_PS1
     # restore shopt settings

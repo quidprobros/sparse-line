@@ -77,12 +77,11 @@ function sparseline_ps1()
         if [[ -r "${dirbase}/refs/heads/${B}" ]]
         then
             H=$(<"${dirbase}/refs/heads/${B}")
-            H="${_H:0:7}"
+            H="${H:0:7}"
         else
             H=$''
             B="^${B:0:7}"
         fi
-
         for tag_path in ${dirbase}/refs/tags/*
         do
             X=$(<"${tag_path}")

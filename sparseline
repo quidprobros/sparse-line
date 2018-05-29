@@ -81,7 +81,7 @@ function sparseline_ps1()
             H="${H:0:7}"
         else
             H=$''
-            B="^${B:0:7}"
+            B=$"${B:0:7}#-------"
         fi
         for tag_path in ${dirbase}/refs/tags/*
         do

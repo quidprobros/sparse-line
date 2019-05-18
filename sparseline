@@ -100,4 +100,4 @@ function sparseline_ps1()
     eval "${prvOpt}"
     return 0
 }
-PROMPT_COMMAND="sparseline_ps1"
+PROMPT_COMMAND="sparseline_ps1;${PROMPT_COMMAND}"

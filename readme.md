@@ -46,3 +46,8 @@ critique
 * osse@freenode#git: I think it might be a bit naïve. For example the file refs/heads/somebranch doesn't necessarily exist even when the branch does
 * lupine@freenode#git: some refs are stored in `.git/packed-refs` and so grepping `refs/*` is not enough; Not sure actually, it makes sense that local branches aren't packed that way
 * _ikke_ git gc will pack local branches
+
+
+more
+===
+Solidarity with <a href="https://996.icu" rel="nofollow"><img src="https://camo.githubusercontent.com/13ac320a9a774e316fe72ffb1eaacf09b01b59a3/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c696e6b2d3939362e6963752d7265642e737667" alt="996.icu" data-canonical-src="https://img.shields.io/badge/link-996.icu-red.svg" style="max-width:100%;"></a>

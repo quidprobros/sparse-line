@@ -1,13 +1,9 @@
 #!/bin/env bash
 
-[[ $PROMPT_COMMAND = "sparseline_ps1" ]] && return
-unset _PS1
 _PS1=$PS1
-
 function sparseline_ps1()
 {
-
-    local __return_code=$?
+    local __return_code="$?"
     # preserve shopt settings
     prvOpt=$(shopt -p extglob nullglob|sed ':a;N;$!ba;s/\n/;/g')
     shopt -s extglob;
@@ -60,8 +56,7 @@ function sparseline_ps1()
     do
         [[ ! -r "${path}" ]] && continue
         S="${g_}${S}"
-        [[ $__return_code -ne 0 ]] && S="${r_}×";
-
+        [[ $__return_code -ne 0 ]] && S="${r_}×"
         dirbase=$(dirname "${path}")
 
         B=$(<"${path}")
@@ -82,8 +77,8 @@ function sparseline_ps1()
         else
             B="<${B:0:7}>"
             #H="$B"
-           # H=$'#-------'
-           # B="${B:0:7}"
+            # H=$'#-------'
+            # B="${B:0:7}"
         fi
         for tag_path in ${dirbase}/refs/tags/*
         do
@@ -92,12 +87,14 @@ function sparseline_ps1()
                 T=$(basename "${tag_path}") && \
                 H="${T}"
         done
-        sparseline_status="${_k} ${S} ${_b}${w_}${R:+$R/}${B}${H:+#$H}${C}${__}${b_}${D}${__}"
+        sparseline_status="$sparseline_status ${_k} ${S} ${_b}${w_}${R:+$R/}${B}${H:+#$H}${C}${__}${b_}${D}${__}"
         :
     done
     export PS1="${sparseline_status}${_PS1}"
+
+    __return_code=0
     # restore shopt settings
     eval "${prvOpt}"
     return 0
 }
-PROMPT_COMMAND="sparseline_ps1;${PROMPT_COMMAND}"
+export PROMPT_COMMAND="sparseline_ps1;${PROMPT_COMMAND}"

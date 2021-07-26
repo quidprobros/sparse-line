@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 _PS1=$PS1
 function sparseline_ps1()
